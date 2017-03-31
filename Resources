@@ -1,0 +1,18 @@
+import pygame
+
+class Resources:
+	imageTable = {}
+	def __init__(self):
+		pass
+
+	@staticmethod
+	def GetImage(name):
+		if name in Resources.imageTable:
+			return Resources.imageTable[name]
+		else :
+			Resources.imageTable[name] = pygame.image.load(name)
+			return Resources.imageTable[name]
+
+	@staticmethod
+	def ClearImages():
+		pass
