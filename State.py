@@ -1,7 +1,8 @@
-import Sprite
+from Sprite import Sprite
 import pygame
-import Game
-import Face
+from Face import Face
+from TileClass import TileMap
+from TileClass import TileSet
 import random
 import math
 
@@ -10,8 +11,10 @@ class State:
 	objectCount = 0
 	hit = 10
 	objectArray = []
+	tileSet = TileSet('img/tileset.png',64,64)
+	tileMap = TileMap('map/tileMap.txt',tileSet)
+	backGround = Sprite('img/ocean.jpg')
 	def __init__(self):
-		self.bg = Sprite.Sprite('img/ocean.jpg')
 		self.quitRequest = False
 	def QuitRequest(self):
 		return self.quitRequest
@@ -20,16 +23,17 @@ class State:
 
 	def Update(self):
 		self.Input()
-		pygame.display.flip()
-		removementList = []
 		for i in sorted(range(len(self.objectArray)), reverse=True):
 			if(self.objectArray[i].IsDead()):
 				self.objectArray.pop(i)
 
 	def Render(self):
-		self.bg.Render(0,0)
+		self.backGround.Render(0,0)
+		self.tileMap.RenderLayer(0,0,0)
 		for x in self.objectArray:
 			x.Render()
+
+		self.tileMap.RenderLayer(1,0,0)
 
 	def Input(self):
 		if not self.quitRequest:
@@ -50,6 +54,6 @@ class State:
 							self.objectArray[i].Damage(self.hit)
 
 	def AddObject(self,x,y):
-		face = Face.Face(x,y)
+		face = Face(x,y)
 		self.objectArray.append(face)
 		self.objectCount +=1
